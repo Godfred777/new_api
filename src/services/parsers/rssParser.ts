@@ -7,9 +7,9 @@ const feedUrls = [
     'https://www.reutersagency.com/feed/?best-regions=world&post_type=best'
   ];
 
-  const parser = new Parser()
+const parser = new Parser()
   
-  async function fetchAllFeeds() {
+async function fetchAllFeeds() {
     const feedPromises = feedUrls.map(url => parser.parseURL(url));
     const feeds = await Promise.all(feedPromises);
   
@@ -18,11 +18,11 @@ const feedUrls = [
         // Process each item
       });
     });
-  }
+}
   
 
   // Schedule tasks to run every 5 minutes
-  cron.schedule('*/5 * * * *', () => {
+cron.schedule('*/5 * * * *', () => {
     fetchAllFeeds();
-  });
+});
   
