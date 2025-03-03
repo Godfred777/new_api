@@ -4,7 +4,12 @@
   "description": "This is a side project for the News API by The African Wave Media Group. This project is not owned by the The African Wave but it is a side project being developed during the development of the News API by The African Wave. You can check their official API on GitHub.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --init",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "author": "Godfred Opintan",
   "license": "ISC",
