@@ -1,5 +1,4 @@
-import express from 'express';
-import { createApp } from './index';
+import { createApp } from './server';
 import dotenv from 'dotenv';
 
 
