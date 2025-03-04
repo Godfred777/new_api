@@ -6,7 +6,6 @@ import { Article } from '../../models/Article';
 const feedUrls = [
     'https://rss.app/feeds/QWstunB5dW93zouY.xml',
     'https://rss.app/feeds/82fYOxUR6iB8aOpS.xml',
-    'https://rss.app/feeds/0G17DqPS78KCLsLS.xml',
 ];
 
 
