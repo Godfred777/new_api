@@ -18,4 +18,4 @@ const ArticleSchema: Schema = new Schema({
     source: {type: String, required: true}
 }) 
 
-const Article = mongoose.model<IArticle>('Article', ArticleSchema);
+export const Article = mongoose.model<IArticle>('Article', ArticleSchema);
