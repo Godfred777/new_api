@@ -5,7 +5,7 @@ interface IArticle extends Document {
     link: string
     content?: string
     contentSnippet?: string
-    source: string
+    source?: string
     pubDate: Date
 }
 
@@ -15,7 +15,7 @@ const ArticleSchema: Schema = new Schema({
     content: String,
     contentSnippet: String,
     pubDate: {type: Date, required: true},
-    source: {type: String, required: true}
+    source: String
 }) 
 
 export const Article = mongoose.model<IArticle>('Article', ArticleSchema);

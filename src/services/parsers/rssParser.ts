@@ -4,8 +4,9 @@ import { Article } from '../../models/Article';
 
 
 const feedUrls = [
-    'http://feeds.bbci.co.uk/news/rss.xml',
-    'https://www.reutersagency.com/feed/?best-regions=world&post_type=best'
+    'https://rss.app/feeds/QWstunB5dW93zouY.xml',
+    'https://rss.app/feeds/82fYOxUR6iB8aOpS.xml',
+    'https://rss.app/feeds/0G17DqPS78KCLsLS.xml',
 ];
 
 
@@ -15,17 +16,23 @@ export async function fetchAllFeeds() {
     const feeds = await Promise.all(feedPromises);
   
     feeds.forEach(feed => {
-      feed.items.forEach(item => {
+      feed.items.forEach(async item => {
         try {
-          const article = new Article({
-            title: item.title,
-            link: item.link,
-            content: item.content,
-            pubDate: item.pubDate,
-            source: item.source,
-            image: item.image,
-          });
-          article.save();
+          await Article.findOneAndUpdate(
+            { link: item.link }, // search criteria
+            {   // update data
+                title: item.title,
+                link: item.link,
+                content: item.content,
+                pubDate: item.pubDate,
+                source: item.source,
+                image: item.image,
+            },
+            {
+                upsert: true, // create if doesn't exist
+                new: true, // return the updated document
+            }
+        );
         } catch (error) {
           console.error('Error saving article: ', error);
         }
