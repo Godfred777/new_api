@@ -1,5 +1,6 @@
 import { createApp } from './server';
 import dotenv from 'dotenv';
+import { connectToDatabase } from './models/database';
 
 
 dotenv.config();
@@ -15,6 +16,9 @@ const config = {
 }
 
 const app = createApp(config);
+
+connectToDatabase(process.env.MONGODB_URI as string);
+
 app.listen(config.port, () => {
     console.log(`Server running at http://${config.host}:${config.port}`);
 });
