@@ -1,8 +1,8 @@
 import { createApp } from './server';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './models/database';
-import cron from 'node-cron';
-import { fetchAllFeeds } from './services/parsers/rssParser';
+import { initSocketServer } from './socket/socketServer';
+import { emitFeedData } from './services/webSocketService';
 
 
 dotenv.config();
@@ -18,15 +18,15 @@ const config = {
 }
 
 const app = createApp(config);
+const server = initSocketServer(app);
+
 
 connectToDatabase(process.env.MONGODB_URI as string);
 
-// Schedule tasks to run every 5 minutes
-cron.schedule('*/5 * * * *', () => {
-    fetchAllFeeds();
-});
-  
+server.on('error', (error) => {
+    console.log("Error: " + error);
+})
 
-app.listen(config.port, () => {
-    console.log(`Server running at http://${config.host}:${config.port}`);
+server.listen(port, () => {
+    console.log(`Server is running on ws://${host}:${port}`);
 });
