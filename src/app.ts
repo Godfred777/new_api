@@ -20,12 +20,15 @@ const app = createApp(config);
 const server = initSocketServer(app);
 
 
-connectToDatabase(process.env.MONGODB_URI as string);
+//connectToDatabase(process.env.MONGODB_URI as string);
 
 server.on('error', (error) => {
     console.log("Error: " + error);
 })
 
-server.listen(port, () => {
-    console.log(`Server is running on ws://${host}:${port}`);
+server.listen(port, host, () => {
+    console.log(`HTTP/WebSocket server running on:
+    - HTTP: http://${host}:${port}
+    - WebSocket: ws://${host}:${port}/socket.io/`);
+    connectToDatabase(process.env.MONGODB_URI as string);
 });

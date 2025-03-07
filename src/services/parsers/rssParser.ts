@@ -17,30 +17,32 @@ export async function fetchAllFeeds() {
       const feedPromises = feedUrls.map(url => parser.parseURL(url));
       const feeds = await Promise.all(feedPromises);
     
-      feeds.forEach(feed => {
-        feed.items.forEach(async (item) => {
-          try {
-            await Article.findOneAndUpdate(
-              { link: item.link }, // search criteria
-              {   // update data
-                  title: item.title,
-                  link: item.link,
-                  content: item.content,
-                  pubDate: item.pubDate,
-                  source: item.source,
-                  image: item.image,
-              },
-              {
-                  upsert: true, // create if doesn't exist
-                  new: true, // return the updated document
+      for (const feed of feeds) {
+        await Promise.allSettled(
+          feed.items.map(async (item) => {
+              try {
+                  await Article.findOneAndUpdate(
+                      { link: item.link },
+                      { 
+                          title: item.title,
+                          link: item.link,
+                          pubDate: item.pubDate,
+                          content: item.content,
+                          source: item.source,
+                          isoDate: item.isoDate,
+                          image: item.image
+                       },
+                      { upsert: true, new: true }
+                  );
+              } catch (error) {
+                  console.error('DB Error:', error);
               }
-          );
-          } catch (error) {
-            console.error('Error saving article: ', error);
-          }
-        });
-      });
+          })
+      );
+      }
+
     } catch (error) {
-      console.error('Error fetching feeds: ', error);
+      console.error('Error fetching feeds:', error);
+      return [];
     }
-}
+  }

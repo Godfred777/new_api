@@ -13,11 +13,22 @@ export function initSocketServer(app: Express) {
         },
         pingTimeout: 60000,
         maxHttpBufferSize: 1e8,
-        transports: ['websocket', 'polling']
+        transports: ['websocket'],
+        allowUpgrades: false,
+        path: '/socket.io',
     });
 
+    io.engine.on('connection_error', (error) => {
+        console.error('Socket connection error:', error);
+    });
+
+
     io.on('connection', async (socket) => {
-        console.log('A user connected');
+        console.log('Connection details:', {
+            headers: socket.handshake.headers,
+            secure: socket.handshake.secure,
+            protocol: socket.conn.protocol
+        });
 
         // Emit feed data to the client
         const safeFeedEmission = async () => {
