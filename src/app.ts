@@ -2,7 +2,6 @@ import { createApp } from './server';
 import dotenv from 'dotenv';
 import { connectToDatabase } from './models/database';
 import { initSocketServer } from './socket/socketServer';
-import { emitFeedData } from './services/webSocketService';
 
 
 dotenv.config();
