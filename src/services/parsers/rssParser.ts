@@ -1,5 +1,6 @@
 import Parser from 'rss-parser';
 import { Article } from '../../models/Article';
+import { time } from 'console';
 
 
 const feedUrls = [
@@ -10,16 +11,37 @@ const feedUrls = [
     'https://ir.thomsonreuters.com/rss/events.xml?items=15',
 ];
 
+
+const parser = new Parser({
+  timeout: 10000, // 10 seconds
+  headers: {
+    'User-Agent': 'RSS Feed Parser',
+  }
+});
+
+
+async function fetchFeedWithRetry(url: string, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await parser.parseURL(url);
+    } catch (error) {
+      if (i === retries - 1) throw error;
+      await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+    }
+  }
+}
+
+
 // Fetch all feeds and save the articles to the database
 export async function fetchAllFeeds() {
     try {
-      const parser = new Parser();
-      const feedPromises = feedUrls.map(url => parser.parseURL(url));
-      const feeds = await Promise.all(feedPromises);
+      const feedPromises = feedUrls.map(url => fetchFeedWithRetry(url).catch(error => console.error(`Error fetching feed from ${url}:`, error)));
+      const feeds = await Promise.allSettled(feedPromises);
     
-      for (const feed of feeds) {
-        await Promise.allSettled(
-          feed.items.map(async (item) => {
+      for (const result of feeds) {
+        if (result.status === 'fulfilled' && result.value) {
+          await Promise.allSettled(
+            result.value.items?.map(async (item) => {
               try {
                   await Article.findOneAndUpdate(
                       { link: item.link },
@@ -34,6 +56,7 @@ export async function fetchAllFeeds() {
                        },
                       { upsert: true, new: true }
                   );
+                  return await Article.find({}).sort({ pubDate: -1 }).limit(10);
               } catch (error) {
                   console.error('DB Error:', error);
               }
@@ -41,8 +64,8 @@ export async function fetchAllFeeds() {
       );
       }
 
-    } catch (error) {
-      console.error('Error fetching feeds:', error);
-      return [];
-    }
   }
+  } catch (error) {
+    console.error('Error fetching feeds:', error);
+  }
+}
