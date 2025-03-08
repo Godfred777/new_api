@@ -3,11 +3,14 @@ import { Article } from '../../models/Article';
 
 
 const feedUrls = [
-   // 'https://rss.app/feeds/QWstunB5dW93zouY.xml',
-  //  'https://rss.app/feeds/82fYOxUR6iB8aOpS.xml',
     'http://feeds.bbci.co.uk/news/rss.xml',
     'https://ir.thomsonreuters.com/rss/news-releases.xml?items=15',
     'https://ir.thomsonreuters.com/rss/events.xml?items=15',
+    'https://rss.app/feeds/EYs0ADiO5vo7soom.xml',
+    'https://rss.app/feeds/0UB6a3TrjPwAaIlg.xml',
+    'https://www.cgtn.com/subscribe/rss/section/china.xml',
+    'https://www.cgtn.com/subscribe/rss/section/world.xml',
+    'https://www.senenews.com/rss/rss-all.xml',
 ];
 
 
