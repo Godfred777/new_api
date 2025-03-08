@@ -1,6 +1,5 @@
 import Parser from 'rss-parser';
 import { Article } from '../../models/Article';
-import { time } from 'console';
 
 
 const feedUrls = [
@@ -50,13 +49,12 @@ export async function fetchAllFeeds() {
                           link: item.link,
                           pubDate: item.pubDate,
                           content: item.content,
-                          source: item.source,
+                          source: item.source?.toString(),
                           isoDate: item.isoDate,
                           image: item.image
                        },
                       { upsert: true, new: true }
                   );
-                  return await Article.find({}).sort({ pubDate: -1 }).limit(10);
               } catch (error) {
                   console.error('DB Error:', error);
               }
@@ -65,6 +63,7 @@ export async function fetchAllFeeds() {
       }
 
   }
+  return await Article.find().sort({ pubDate: -1 }).limit(10);
   } catch (error) {
     console.error('Error fetching feeds:', error);
   }
