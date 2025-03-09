@@ -1,18 +1,18 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 interface IArticle extends Document {
-    title: string
+    title: Map<string, string>
     link: string
-    content?: string
+    content?: Map<string, string>
     contentSnippet?: string
     source?: string
     pubDate: Date
 }
 
 const ArticleSchema: Schema = new Schema({
-    title: {type: String, required: true},
+    title: {type: Map, of: String, required: true},
     link: {type: String, required: true, unique: true},
-    content: String,
+    content: {type: Map, of: String},
     contentSnippet: String,
     pubDate: {type: Date, required: true},
     source: String

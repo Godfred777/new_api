@@ -1,0 +1,10 @@
+{
+    "article": {
+      "title": "Titre",
+      "content": "Contenu",
+      "published": "Publié le {{date}}"
+    },
+    "errors": {
+      "feed_fetch": "Impossible de récupérer les flux d'actualités"
+    }
+}

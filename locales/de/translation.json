@@ -1,0 +1,10 @@
+{
+    "article": {
+      "title": "Titel",
+      "content": "Inhalt",
+      "published": "Veröffentlicht am {{date}}"
+    },
+    "errors": {
+      "feed_fetch": "Fehler beim Abrufen der Newsfeeds"
+    }
+}

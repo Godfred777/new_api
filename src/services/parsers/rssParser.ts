@@ -1,5 +1,7 @@
 import Parser from 'rss-parser';
 import { Article } from '../../models/Article';
+import { translate } from '../translation';
+
 
 
 const feedUrls = [
@@ -48,10 +50,20 @@ export async function fetchAllFeeds() {
                   await Article.findOneAndUpdate(
                       { link: item.link },
                       { 
-                          title: item.title,
+                          title: {
+                            en: item.title,
+                            es: translate(item.title as string, 'es'),
+                            fr: translate(item.title as string, 'fr'),
+                            de: translate(item.title as string, 'de')
+                          },
                           link: item.link,
                           pubDate: item.pubDate,
-                          content: item.content,
+                          content: {
+                            en: item.content,
+                            es: translate(item.content as string, 'es'),
+                            fr: translate(item.content as string, 'fr'),
+                            de: translate(item.content as string, 'de')
+                          },
                           source: item.source?.toString(),
                           isoDate: item.isoDate,
                           image: item.image
@@ -66,7 +78,7 @@ export async function fetchAllFeeds() {
       }
 
   }
-  return await Article.find().sort({ pubDate: -1 }).limit(10);
+  return await Article.find().sort({ pubDate: -1 }).limit(50);
   } catch (error) {
     console.error('Error fetching feeds:', error);
   }
